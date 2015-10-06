@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}Post - {{ post.ID }}{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <div class="profile-header">
+        <h1>{{  post.Title }}</h1>
+        <p>Last edited {{ post.LastActivityDate }}. Created {{ post.CreationDate }}.</p>
+        <div class="card-panel hoverable" style="border: 1px #9C27B0 solid">{{ post.Body }}</div>
+
+    </div>
+</div>
+    {% if answers[0] is defined %}
+    {% for i in answers %}
+        <div class="card-panel">{{ i.Body }}</div>
+    {% endfor %}
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block title %}Knowledge Carrier{% endblock %}
+
+{% block page_content %}
+<div id="demo">
+  <h1>List of Knowledge Carriers</h1>
+    <div class="sw">
+    <form action="{{ url_for('experts.get_experts',q=q) }}" method="get">
+      <input type="search" name="q" class="search" placeholder="Search for an expert" />
+      <button class="go"><span class="entypo-search"></span></button>
+    </form>
+  </div>
+
+  <!-- Responsive table starts here -->
+  <!-- For correct display on small screens you must add 'data-title' to each 'td' in your table -->
+  <div class="table-responsive-vertical shadow-z-1">
+  <!-- Table starts here -->
+  <table id="table" class="table table-hover table-mc-light-blue">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+            <th>Age</th>
+            <th>Location</th>
+          <th>Reputation</th>
+
+        </tr>
+      </thead>
+      <tbody>
+      {% for i in list %}
+        <tr>
+          <td data-title="ID">{{i.ID}}</td>
+          <td data-title="Name"><a href="{{ url_for('experts.user', username=i.name) }}" >{{i.name}}</a></td>
+            <td data-title="Age">{{i.Age}}</td>
+            <td data-title="Location">{{i.Location}}</td>
+          <td data-title="Reputation">{{i.Reputation}}</td>
+        </tr>
+      {% endfor %}
+
+      </tbody>
+    </table>
+  {% if list[0] is not defined %}
+      <h4>No results found</h4>
+  {% endif %}
+
+
+  </div>
+</div>
+{% if pagination %}
+    {{ pagination.links }}
+{% else %}
+    <a href="{{ url_for('experts.get_experts') }}">Back to the overview</a>
+{% endif %}
+
+{% endblock %}

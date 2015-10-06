@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block title %}Profil - {{ user.username }}{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <img class="img-rounded profile-thumbnail" src="{{ grav }}">
+    <div class="profile-header">
+        <h1>{{ user.name }}</h1>
+        {% if user.name or user.location %}
+        <p>
+            {% if user.name %}{{ user.name }}<br>{% endif %}
+            {% if user.Location %}
+                From <a href="http://maps.google.com/?q={{ user.Location }}">{{ user.Location }}</a><br>
+            {% endif %}
+        </p>
+        {% endif %}
+
+        <p>Member since {{ user.CreationDate }}. Last seen {{ user.LastAccessDate }}.</p>
+        <p>{{ user.Views }}  profile views. {{ user.Reputation}} Reputation.</p>
+        <p>{{ user.DownVotes }}  Downvotes. {{ user.WebsiteUrl}} WebsiteUrl.</p>
+
+
+    </div>
+</div>
+{% endblock %}

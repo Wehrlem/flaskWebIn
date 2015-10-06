@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %}Search for - {{ search_parameter }}{% endblock %}
+
+{% block page_content %}
+<div id="demo">
+  <h1>Looking for a Knowledge Carrier for {{ search_parameter }}</h1>
+    <div class=" btn card-panel hoverable">Concepts</div>
+        <div class="card-panel">{{ keywords }}</div><br>
+  <!-- Responsive table starts here -->
+  <!-- For correct display on small screens you must add 'data-title' to each 'td' in your table -->
+    <div class=" btn card-panel hoverable">Ranking of Knowlegde Carriers</div>
+  <table id="table" class="table table-hover table-mc-light-blue">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Contact</th>
+          <th>Score</th>
+            <th>Details</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for i in list %}
+        <tr>
+          <td data-title="ID">{{i.name}}</td>
+            <td>{{i.name}}@example.com</td>
+          <td data-title="Link">
+            {{i.score}}
+          </td>
+          <td data-title="Status"><a href="{{ url_for('surface.index',q=search_parameter,e='TRUE',d=i.score) }}" class="btn button">Details</a></td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+</div>
+{% endblock %}

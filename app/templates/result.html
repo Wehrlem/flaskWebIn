@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block title %}Search for - {{ search_parameter }}{% endblock %}
+
+{% block page_content %}
+<div id="demo">
+  <h1>Search for - {{ search_parameter }}</h1>
+
+  <!-- Responsive table starts here -->
+  <!-- For correct display on small screens you must add 'data-title' to each 'td' in your table -->
+    <div class=" btn card-panel hoverable">Concepts</div>
+        <div class="card-panel">{{ keywords }}</div><br>
+    <div class=" btn card-panel hoverable">Query Results</div>
+
+    <div class="card-panel table-responsive-vertical shadow-z-1">
+  <!-- Table starts here -->
+  <table id="table" class="table table-hover table-mc-light-blue">
+      <thead>
+        <tr>
+          <th>Question</th>
+          <th>Best Answer</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for i in list %}
+        <tr>
+          <td data-title="Link">
+            <a href="{{ url_for('posts.get_post', postid=i.PostId) }}">{{  i.short }}</a>
+          </td>
+          <td data-title="Answer">{{ i.answer }}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+{{ list }}
+  {% if list[0] is not defined %}
+      <h4>No results found</h4>
+  {% endif %}
+  </div><br>
+            <a href="{{ url_for('surface.index',q=search_parameter,e='TRUE') }}" class="btn button">Check for Knowledge Carriers</a>
+
+        </form>
+<br>
+
+
+</div>
+{% endblock %}

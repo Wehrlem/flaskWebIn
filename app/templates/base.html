@@ -1,0 +1,55 @@
+{% extends "material/base.html" %}
+{% import "material/utils.html" as util %}
+{% import "material/wtf.html" as wtf %}
+
+{% block title %}Flasky{% endblock %}
+
+{% block head %}
+{{ super() }}
+<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+<link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+{% endblock %}
+
+{% block navbar %}
+<nav>
+    <div class="nav-wrapper ">
+      <a href="#" class="brand-logo right"><img style="height: 65px" src=" {{ url_for('static', filename='images/logo.png') }}"></a>
+      <ul id="nav-mobile" class="left hide-on-med-and-down">
+          <li><a href="{{ url_for('surface.index') }}">KCFS</a></li>
+          <li><a href="{{ url_for('granules.get_granules') }}">Concepts</a></li>
+          <li><a href="{{ url_for('experts.get_experts') }}">Knowlegde Carriers</a></li>
+          <li><a href="{{ url_for('posts.get_posts') }}">Contributions</a></li>
+          <li><a href="{{ url_for('graph.graph') }}">Graph</a></li>
+      </ul>
+    </div>
+  </nav>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    {% for message in get_flashed_messages() %}
+    <div class="alert alert-warning">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{ message }}
+    </div>
+    {% endfor %}
+
+    {% block page_content %}{% endblock %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+
+     <script> jQuery(document).ready(function(){
+    // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
+    jQuery('.modal-trigger').leanModal();
+
+  });
+
+          </script>
+    <script  src="{{ url_for('static', filename='main.js') }}"></script>
+{% endblock %}

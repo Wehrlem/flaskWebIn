@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block page_content %}
+    <h2>Query the cube</h2>
+  <div class="sw">
+    <form action="{{ url_for('surface.index',q=q) }}" method="get">
+      <input type="search" name="q" class="search" placeholder="Query the cube..." />
+      <button class="go"><span class="entypo-search"></span></button>
+    </form>
+  </div>
+{% endblock %}

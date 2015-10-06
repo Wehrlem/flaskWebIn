@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% block title %}Profil - {{ user.username }}{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <div class="profile-img">
+    </div>
+    <div class="profile-header card-panel row " style="margin:0px 0px;">
+<div class="col s1">
+        <img class="circle responsive-img " src="{{ grav }}">
+</div>
+    <!--{% set ran=(1,2,3,4,5,6,7,8,9,10) %}
+    {%   set backurl= ran|random %} -->
+
+
+        {% if user.name or user.location %}
+            {% if user.name %}<div class="col s2"><span class="blue-grey-text text-darken-3">Name</span></br>
+{{ user.name }}</div>{% endif %}
+            {% if user.Location %}
+               <div class="col s1"><span class="blue-grey-text text-darken-3">Location</span></br><a href="http://maps.google.com/?q={{ user.Location }}">{{ user.Location }}</a></div>
+            {% endif %}
+        {% endif %}
+        <div class="col s2 valign"><span class="blue-grey-text text-darken-3">Member since</span><br> {{ user.CreationDate }}</div>
+        <div class="col s2 "><span class="blue-grey-text text-darken-3 ">Last seen</span><br> {{ user.LastAccessDate }}.</div>
+        <div class="col s2"><span class="blue-grey-text text-darken-3">Profile views</span></br>{{ user.Views }}</div>
+        <div class="col s1"><span class="blue-grey-text text-darken-3">Reputation</span></br>{{ user.Reputation}}</div>
+        <div class="col s1"><span class="blue-grey-text text-darken-3">Downvotes</span></br>{{ user.DownVotes }}</div>
+   </div>
+<h3>Concepts</h3>
+<h3>Settings</h3>
+<ul class="collapsible" data-collapsible="accordion">
+    <li>
+      <div class="collapsible-header"><i class="material-icons">filter_drama</i>Refinement Values</div>
+      <div class="collapsible-body"><div class="collection">
+    {% for item in categories.keys() %}
+     <div class="row collection-item">
+    <div class="col s12 card-title"><h5>{{ item }}</h5></div>
+
+      {% for k in categories[item] %}
+          {% set kaka = (12/categories[item]|length)|int %}
+          {% set sas = k|lower|replace('-','')+'setting' %}
+
+    <div class="col s12 m{{ kaka }} l{{ kaka }}"><span>{{ k }}</span><a data-target="modal{{ sas }}" style="float:right;margin-right: 20px" class="modal-trigger  waves-effect waves-light btn " href="#modal{{ sas }}" id="{{ sas }}first">{% if user[sas] %}{{ user[sas] }}{% else %}Please define{% endif %}</a>
+        <div id="modal{{ sas }}" class="modal">
+            <div class="modal-content">
+                <h4>Settings for {{ k }}</h4>
+                 <form action="#" method="post" class="{{ sas }}">
+                    <p>
+                        <input name="group{{ sas }}" type="radio" value="Minor" {% if user[sas] == 'Minor' %}checked="checked" {% endif %}id="{{ sas }}1" />
+                        <label for="{{ sas }}1">Minor</label>
+                        <input name="group{{ sas }}" type="radio" value="Light" {% if user[sas] == 'Light' %}checked="checked" {% endif %}id="{{ sas }}2" />
+                        <label for="{{ sas }}2">Light</label>
+                        <input name="group{{ sas }}" type="radio" value="Moderate" {% if user[sas] == 'Moderate' %}checked="checked" {% endif %}id="{{ sas }}3"  />
+                        <label for="{{ sas }}3">Moderate</label>
+                        <input name="group{{ sas }}" type="radio" value="Strong" {% if user[sas] == 'Strong' %}checked="checked" {% endif %}id="{{ sas }}4"  />
+                        <label for="{{ sas }}4">Strong</label>
+                        <input name="group{{ sas }}" type="radio" value="Major" {% if user[sas] == 'Major' %}checked="checked" {% endif %}id="{{ sas }}5"  />
+                        <label for="{{ sas }}5">Major</label>
+                    </p>
+                  </form>
+            </div>
+            <div class="modal-footer">
+              <a href="#!" class="modal-action waves-effect waves-blue btn jaja" id="{{ sas }}">Save</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+  </div>
+        {% endfor %}
+</div>
+</div>
+    </li>
+
+  </ul>
+
+
+
+
+  <!-- Modal Structure -->
+
+
+
+
+</div>
+{% endblock %}
+    {% block scripts %}
+        {{ super() }}
+        <script> var username="{{ user.name }} "</script>
+        <script  src="{{ url_for('static', filename='expert.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block title %}Contributions{% endblock %}
+
+{% block page_content %}
+<div id="demo">
+  <h1>Contributions</h1>
+
+    <div class="sw">
+    <form action="{{ url_for('posts.get_posts',q=q) }}" method="get">
+      <input type="search" name="q" class="search" placeholder="Search for a post" />
+      <button class="go"><span class="entypo-search"></span></button>
+    </form>
+  </div>
+
+
+  <!-- Responsive table starts here -->
+  <!-- For correct display on small screens you must add 'data-title' to each 'td' in your table -->
+  <div class="table-responsive-vertical shadow-z-1">
+  <!-- Table starts here -->
+  <table id="table" class="table table-hover table-mc-light-blue">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Author</th>
+          <th>Content</th>
+          <th>Type</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for i in list %}
+        <tr>
+          <td data-title="ID">{{i.PostId}}</td>
+          <td data-title="Name"><a href="{{ url_for('experts.user', username=i.name) }}">{{i.name}}</a></td>
+          <td data-title="Link">
+            <a href="{{ url_for('posts.get_post', postid=i.PostId) }}">{{  i.short }}</a>
+          </td>
+          <td data-title="Status">{{ i.PostType }}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  {% if list[0] is not defined %}
+      <h4>No results found</h4>
+  {% endif %}
+  </div>
+</div>
+{% if pagination %}
+    {{ pagination.links }}
+{% else %}
+    <a href="{{ url_for('experts.get_experts') }}">Back to the overview</a>
+{% endif %}
+{% endblock %}

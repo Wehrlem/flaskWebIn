@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block title %}Profil Liste{% endblock %}
+
+{% block page_content %}
+<div id="demo">
+  <h1>List of granules</h1>
+    <div class="sw">
+    <form action="{{ url_for('granules.get_granules',q=q) }}" method="get">
+      <input type="search" name="q" class="search" placeholder="Search for a granule" />
+      <button class="go"><span class="entypo-search"></span></button>
+    </form>
+  </div>
+
+  <!-- Responsive table starts here -->
+  <!-- For correct display on small screens you must add 'data-title' to each 'td' in your table -->
+  <div class="table-responsive-vertical shadow-z-1">
+  <!-- Table starts here -->
+  <table id="table" class="table table-hover table-mc-light-blue">
+      <thead>
+        <tr>
+          <th>Name</th>
+            <th>Level</th>
+            <th>In Granules</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for i in list %}
+        <tr>
+          <td data-title="Name">{{i.name}}</td>
+            <td data-title="ID">{{i.Level}}</td>
+          <td data-title="ID">{{i.gran}}</td>
+        </tr>
+      {% endfor %}
+
+      </tbody>
+    </table>
+  {% if list[0] is not defined %}
+      <h4>No results found</h4>
+  {% endif %}
+
+
+  </div>
+</div>
+{% if pagination %}
+    {{ pagination.links }}
+{% else %}
+    <a href="{{ url_for('experts.get_experts') }}">Back to the overview</a>
+{% endif %}
+
+{% endblock %}
