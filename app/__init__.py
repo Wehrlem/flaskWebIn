@@ -17,13 +17,11 @@ db_name = 'history'
 db_type = 'plocal'
 #cache = Cache()
 
-if not client.db_exists(db_name, db_type):
-        client.db_create(db_name, 'history', db_type)
 
 def create_app(config_name):
     app = Flask(__name__)
 
-    client.init_app(app,server_un='root', server_pw='don1664',host='localhost', port=2424)
+    client.init_app(app,server_un='admin', server_pw='admin',host='localhost', port=2424)
     app.config.from_object(config[config_name])
     config[config_name].init_app(app)
     material.init_app(app)
