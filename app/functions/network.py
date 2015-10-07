@@ -18,7 +18,6 @@ def create_simmple_graph():
     data = json_graph.node_link_data(G)
     return json.dumps(data)
 
-print create_simmple_graph()
 
 
 

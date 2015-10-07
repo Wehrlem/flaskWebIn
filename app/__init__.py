@@ -4,6 +4,7 @@ from flask.ext.pagedown import PageDown
 from config import config
 from flask.ext.orientdb import OrientDB
 from flask_material import Material
+import os
 import sys
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -49,5 +50,5 @@ def create_app(config_name):
     from .granules import granules as granules_blueprint
     app.register_blueprint(granules_blueprint)
     return app
-#if __name__ == "__main__":
-#    create_app()
+if __name__ == "__main__":
+    create_app(os.getenv('FLASK_CONFIG') or 'default')
