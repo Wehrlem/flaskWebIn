@@ -5,7 +5,7 @@ from networkx.readwrite import json_graph
 files = [ "Badges", "Comments", "Posts", "Users", "Votes","Tags" ]
 db_name = 'history'
 client = orient.OrientDB("localhost", 2424)
-client.db_open( db_name, "root", "don1664" )
+client.db_open( db_name, "admin", "admin" )
 
 def create_simmple_graph():
     results = client.query("select name AS user_name, ID ,in(knows).name AS concepts , inE(knows).strength AS strength, inE(knows).@rid as edgeid from Expert WHERE ID =10")
