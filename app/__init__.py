@@ -17,8 +17,12 @@ db_name = 'history'
 db_type = 'plocal'
 #cache = Cache()
 
+if not client.db_exists(db_name, db_type):
+        client.db_create(db_name, 'history', db_type)
+
 def create_app(config_name):
     app = Flask(__name__)
+
     client.init_app(app,server_un='root', server_pw='don1664',host='localhost', port=2424)
     app.config.from_object(config[config_name])
     config[config_name].init_app(app)
@@ -47,3 +51,5 @@ def create_app(config_name):
     from .granules import granules as granules_blueprint
     app.register_blueprint(granules_blueprint)
     return app
+#if __name__ == "__main__":
+#    create_app()
