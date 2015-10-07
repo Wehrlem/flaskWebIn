@@ -4,7 +4,6 @@ altgraph==0.10.1
 bdist-mpkg==0.4.4
 bleach==1.4.2
 blinker==1.4
-bonjour-py==0.3
 coverage==3.7.1
 coverage-reporter==0.1
 decorator==4.0.2
