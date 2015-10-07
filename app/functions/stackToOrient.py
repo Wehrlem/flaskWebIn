@@ -427,4 +427,4 @@ def update_concept_count_2(db):
 
 
 
-update_concept_count()
+update_concept_count_2(db)
