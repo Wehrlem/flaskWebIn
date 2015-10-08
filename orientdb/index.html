@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="de" ng-app="SNF">
+<head>
+  <meta charset="utf-8">
+  <title>SOM TO FCM</title>
+  <link href="lib/css/bootstrap-3.0.0.min.css" rel="stylesheet">
+  <link href="lib/css/bootstrap-multiselect.css" rel="stylesheet">
+    <style>
+        body {
+            padding-top: 30px;
+			margin:25px;
+            padding-bottom: 20px;
+			
+        }
+        #viz {
+
+        }
+
+        text {
+            pointer-events: none;
+            fill: #fff;
+        }
+
+        .grandparent text {
+            font-weight: normal;
+            fill: #000;
+        }
+
+        rect {
+            fill: none;
+            stroke: #fff;
+        }
+
+        rect.parent, .grandparent rect {
+            stroke-width: 2px;
+        }
+
+        .grandparent rect {
+            fill: #fff;
+        }
+
+        .grandparent:hover rect {
+        }
+
+        .children rect.parent, .grandparent rect {
+            cursor: pointer;
+        }
+
+        rect.parent {
+            pointer-events: all;
+        }
+    </style>
+</head>
+<body>
+  <h1>OrientDB of FCM's of CS - Stackoverflow - Dataset</h1>
+  <br><br>
+  <p>Use Username: admin and password: admin to explore<p>
+  <a href='http://knowtology.com:2484/studio/index.html'>Go to OrientDB </a>
+  <!-- <div>&copy; Wehrlem</div> -->
+ 
+  <script src="lib/js/bootstrap-3.0.0.min.js"></script>
+  <script src="lib/js/bootstrap-multiselect.js"></script>
+ 
+</body>
+</html>
