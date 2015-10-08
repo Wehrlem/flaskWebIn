@@ -4,7 +4,6 @@ from flask.ext.pagedown import PageDown
 from config import config
 from flask.ext.orientdb import OrientDB
 from flask_material import Material
-import os
 import sys
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -18,10 +17,8 @@ db_name = 'history'
 db_type = 'plocal'
 #cache = Cache()
 
-
 def create_app(config_name):
     app = Flask(__name__)
-
     client.init_app(app,server_un='admin', server_pw='admin',host='localhost', port=2424)
     app.config.from_object(config[config_name])
     config[config_name].init_app(app)
@@ -30,7 +27,7 @@ def create_app(config_name):
     client.set_db(db_name)
 
     #cache.init_app(app, config={'CACHE_TYPE': 'simple'})
-    jinja_options = {'extensions': ['jinja2.ext.autoescape', 'jinja2.ext.with_']}
+
     if not app.debug and not app.testing and not app.config['SSL_DISABLE']:
         from flask.ext.sslify import SSLify
         sslify = SSLify(app)
@@ -50,5 +47,7 @@ def create_app(config_name):
     from .granules import granules as granules_blueprint
     app.register_blueprint(granules_blueprint)
     return app
+
 if __name__ == "__main__":
-    create_app(os.getenv('FLASK_CONFIG') or 'default')
+    app = create_app('default')
+    app.run(debug=True)
