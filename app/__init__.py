@@ -46,6 +46,8 @@ def create_app(config_name):
     app.register_blueprint(graph_blueprint)
     from .granules import granules as granules_blueprint
     app.register_blueprint(granules_blueprint)
+    from .orientdb import orient as orient_blueprint
+    app.register_blueprint(orient_blueprint)
     return app
 
 if __name__ == "__main__":

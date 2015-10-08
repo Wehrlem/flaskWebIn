@@ -1,16 +1,13 @@
-<!doctype html>
-<html lang="de" ng-app="SNF">
-<head>
-  <meta charset="utf-8">
-  <title>SOM TO FCM</title>
-  <link href="lib/css/bootstrap-3.0.0.min.css" rel="stylesheet">
-  <link href="lib/css/bootstrap-multiselect.css" rel="stylesheet">
+{% extends "material/base.html" %}
+{% block title %}SOM to FCM{% endblock %}
+{% block head %}
+{{ super() }}
     <style>
         body {
             padding-top: 30px;
 			margin:25px;
             padding-bottom: 20px;
-			
+
         }
         #viz {
 
@@ -50,16 +47,12 @@
             pointer-events: all;
         }
     </style>
-</head>
-<body>
-  <h1>OrientDB of FCM's of CS - Stackoverflow - Dataset</h1>
+{% endblock %}
+{% block content %}
+
+<h1>OrientDB of FCM's of CS - Stackoverflow - Dataset</h1>
   <br><br>
-  <p>Use Username: admin and password: admin to explore<p>
+  <p>Use Username: admin and password: admin to explore the FCM Database<p>
   <a href='http://knowtology.com:2484/studio/index.html'>Go to OrientDB </a>
   <!-- <div>&copy; Wehrlem</div> -->
- 
-  <script src="lib/js/bootstrap-3.0.0.min.js"></script>
-  <script src="lib/js/bootstrap-multiselect.js"></script>
- 
-</body>
-</html>
+{% endblock %}
