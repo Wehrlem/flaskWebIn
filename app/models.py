@@ -1,36 +1,33 @@
-from datetime import datetime
-import hashlib
-from werkzeug.security import generate_password_hash, check_password_hash
-from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
-from markdown import markdown
-import bleach
-from flask import current_app, request, url_for
-from flask.ext.login import UserMixin, AnonymousUserMixin
-from app.exceptions import ValidationError
 import random
-
 from . import client
 import nltk
 from nltk.tokenize import RegexpTokenizer
 tokenizer = RegexpTokenizer(r'\w+')
+from fuzzywuzzy import fuzz
+from fuzzywuzzy import process
 
 from nltk.stem.porter import *
+
 class Granules():
 
     def get_paged(self,page):
         with client.connection():
             return client.query("SELECT * FROM concept ORDER BY Level ASC SKIP {0} LIMIT {1}".format((page-1)*20,20))
+
     def get_count(self):
         with client.connection():
             return client.query("SELECT count(*) from concept")
+
     def get_granules_by_name(self,username):
         with client.connection():
             return client.query("SELECT * FROM concept WHERE name ='{0}' ".format(username))
+
     def get_granules_by_search(self,get_granules_by_search):
         with client.connection():
             return client.query("SELECT FROM concept WHERE name like '%{0}%' ".format(get_granules_by_search))
 
 class Experts():
+
     def get_experts(self):
         with client.connection():
             return client.query("SELECT * FROM Expert")
@@ -49,15 +46,19 @@ class Experts():
           client.command('create property Expert.CreationDate date')
           client.command('create property Expert.DownVotes integer')
           client.command('create property Expert.UpVotes integer')
+
     def get_expert_by_owner(self,PostId):
         with client.connection():
             return client.query("SELECT name from Expert WHERE ID={0}".format(PostId))
+
     def get_paged(self,page):
         with client.connection():
             return client.query("SELECT * FROM Expert SKIP {0} LIMIT {1}".format((page-1)*20,20))
+
     def get_count(self):
         with client.connection():
             return client.query("SELECT count(*) from Expert")
+
     def get_expert_by_name(self,username):
         with client.connection():
             return client.query("SELECT * FROM Expert WHERE name ='{0}' ".format(username))
@@ -93,8 +94,8 @@ class Posts():
 
     def get_paged(self,page):
         with client.connection():
-            return client.query("SELECT * FROM Content WHERE Body <> '' ORDER BY postId SKIP {0} LIMIT {1}".format((page-1)*10,10))
-
+            #return client.query("SELECT * FROM Content WHERE Body <> '' ORDER BY postId SKIP {0} LIMIT {1}".format((page-1)*10,10))
+            return client.query("SELECT Title, Body,PostId,PostType, in(created).name as username FROM content WHERE Body <> '' ORDER BY postId SKIP {0} LIMIT {1}".format((page-1)*10,10))
     def get_count(self):
         with client.connection():
             return client.query("SELECT count(*) from Content")
@@ -114,14 +115,35 @@ class Posts():
                 return True
             return result[0]
 
-
-
     def get_answer_by_id(self,id):
         with client.connection():
             return client.query('SELECT EXPAND( BOTH( "parents" ) ) FROM Content WHERE PostId = {0} ORDER BY Score DESC '.format(id))
 
 class KCFS:
+
     def get_related_question(self,query):
+        with client.connection():
+            result={}
+            if len(query.split())< 2:
+                print 'asd'
+                query = client.query('select * from Content where Title Like "%{0}%" AND PostType = "Question" ORDER By Score Limit 5'.format(query))
+                for l,q in enumerate(query):
+                    answer = client.query('SELECT EXPAND( BOTH( "parents" ) ) FROM Content WHERE PostId = {0} ORDER BY Score DESC LIMIT 1'.format(q.PostId))
+                    if not answer:
+                        answer=None
+                    else:
+                        answer=' '.join(answer[0].Body.split()[:10])
+                    result[l]={'Title':q.Title,'PostId':q.PostId,'Body':' '.join(q.Body.split()[:10]),'Answer': answer}
+            else:
+                list_of_question=client.query('select Title,PostId,Body from Content')
+                for l,i in enumerate(list_of_question):
+                    if fuzz.token_set_ratio(query,i.Title) >40:
+                        answer = client.query('SELECT EXPAND( BOTH( "parents" ) ) FROM Content WHERE PostId = {0} ORDER BY Score DESC LIMIT 1'.format(i.PostId))
+                        result[l]={'Title':i.Title,'PostId':i.PostId,'Body':' '.join(i.Body.split()[:10]),'Answer':' '.join(answer[0].Body.split()[:10])}
+            return result
+            #return client.query('select * from Content where [Title] LUCENE "({0})" AND PostType = "Question" ORDER By Score Limit 5'.format(full))
+
+    def get_related_question_old(self,query):
         with client.connection():
             word = tokenizer.tokenize(query)
             word = nltk.pos_tag(word)
@@ -138,14 +160,20 @@ class KCFS:
         word = nltk.pos_tag(word)
         # or w[1].startswith('W')
         return ', '.join([w[0] for w in word if w[1].startswith('N')])
+
     def get_key_of_question_next(self,query):
         word = tokenizer.tokenize(query)
         word = nltk.pos_tag(word)
         # or w[1].startswith('W')
         return [w[0] for w in word if w[1].startswith('N')]
+    def get_question_by_title(self,title):
+        with client.connection():
+            return client.query('SELECT * From Content WHERE Title = "{0}" AND PostType = "Question" LIMIT 1'.format(title))
     def get_answer_by_id(self,id):
+
         with client.connection():
             return client.query('SELECT EXPAND( BOTH( "parents" ) ) FROM Content WHERE PostId = {0} ORDER BY Score DESC LIMIT 1'.format(id))
+
     def return_expert_by_concept(self, concept):
         with client.connection():
             return client.query("SELECT * FROM Expert SKIP {0} LIMIT {1}".format(random.randint(0,6000),10))

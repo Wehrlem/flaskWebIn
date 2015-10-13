@@ -1,7 +1,6 @@
 
 from flask import render_template
 from . import granules
-from .. import client,db_name,db_type
 from flask.ext.paginate import Pagination
 from flask import request
 from ..models import Granules

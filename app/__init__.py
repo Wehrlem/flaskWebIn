@@ -4,29 +4,34 @@ from flask.ext.pagedown import PageDown
 from config import config
 from flask.ext.orientdb import OrientDB
 from flask_material import Material
+from flask.ext.elasticsearch import FlaskElasticsearch
+
+from flask.ext.cache import Cache
 import sys
+import os
+
+#set default to utf-8
 reload(sys)
 sys.setdefaultencoding('utf-8')
-from flask.ext.cache import Cache
 
+#load the objects
 material = Material()
-
+cache = Cache()
 pagedown = PageDown()
 client = OrientDB()
-db_name = 'history'
-db_type = 'plocal'
-#cache = Cache()
+es = FlaskElasticsearch()
+
 
 def create_app(config_name):
     app = Flask(__name__)
-    client.init_app(app,server_un='admin', server_pw='admin',host='localhost', port=2424)
     app.config.from_object(config[config_name])
+    client.init_app(app,server_un='jaja', server_pw='jaja')
     config[config_name].init_app(app)
     material.init_app(app)
     pagedown.init_app(app)
-    client.set_db(db_name)
-
-    #cache.init_app(app, config={'CACHE_TYPE': 'simple'})
+    es.init_app(app)
+    client.set_db(config['db_name'])
+    cache.init_app(app, config={'CACHE_TYPE': 'simple'})
 
     if not app.debug and not app.testing and not app.config['SSL_DISABLE']:
         from flask.ext.sslify import SSLify
@@ -51,5 +56,5 @@ def create_app(config_name):
     return app
 
 if __name__ == "__main__":
-    app = create_app('default')
+    app = create_app(os.getenv('FLASK_CONFIG') or 'default')
     app.run(debug=True)

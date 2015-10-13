@@ -16,23 +16,24 @@
   <table id="table" class="table table-hover table-mc-light-blue">
       <thead>
         <tr>
-          <th>Question</th>
-          <th>Best Answer</th>
+          <th>Author</th>
+          <th>Contribution</th>
+            <th>Score</th>
         </tr>
       </thead>
       <tbody>
-      {% for i in list %}
+      {% for i in list['hits']['hits'] %}
         <tr>
           <td data-title="Link">
-            <a href="{{ url_for('posts.get_post', postid=i.PostId) }}">{{  i.short }}</a>
+            {{ i['_source']['author'] }}
           </td>
-          <td data-title="Answer">{{ i.answer }}</td>
+          <td data-title="Answer">  <a href="{{ url_for('posts.get_post', postid=i['_id']) }}">{% if i['_source']['title'] %}{{ i['_source']['title'] }}{% else %}{{ i['_source']['text'] }}{% endif %}</a>
+</td><td data-title="Score">{{ i['_score'] }}</td>
         </tr>
       {% endfor %}
       </tbody>
     </table>
-{{ list }}
-  {% if list[0] is not defined %}
+  {% if list['hits']['total'] ==0 %}
       <h4>No results found</h4>
   {% endif %}
   </div><br>

@@ -1,5 +1,7 @@
 # coding=utf-8
 import re
+from elasticsearch import Elasticsearch
+from elasticsearch.helpers import scan
 
 import os
 from pyorient import orient
@@ -9,7 +11,8 @@ import re
 from nltk import FreqDist
 import nltk
 import operator
-
+es = Elasticsearch()
+from datetime import datetime
 
 from sklearn.feature_extraction.text import TfidfVectorizer
 
@@ -427,4 +430,37 @@ def update_concept_count_2(db):
 
 
 
-update_concept_count_2(db)
+
+def elas_posts(es):
+  results = client.query('SELECT Title, Body,PostId,PostType, in(created).name as username FROM content WHERE Body <> ""',-1)
+  for result in results:
+    if result.username:
+      uname = result.username[0]
+    else:
+      uname=''
+    if result.Title:
+      doc = {
+        'author': uname,
+        'title':result.Title,
+        'text': result.Body,
+        'timestamp': datetime.now(),
+      }
+      res = es.index(index="know", doc_type='question', id=result.PostId, body=doc)
+    else:
+      doc = {
+        'author': uname,
+        'text': result.Body,
+        'timestamp': datetime.now(),
+      }
+      res = es.index(index="know", doc_type='answer', id=result.PostId, body=doc)
+
+#elas_posts(es)
+print es.search(index='know', body={
+    "query": {
+        "filtered": {
+            "filter": {
+                "term": { "text": "athenss" }
+            }
+        }
+    }
+})

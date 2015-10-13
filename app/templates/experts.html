@@ -26,10 +26,10 @@
         <div class="col s1"><span class="blue-grey-text text-darken-3">Reputation</span></br>{{ user.Reputation}}</div>
         <div class="col s1"><span class="blue-grey-text text-darken-3">Downvotes</span></br>{{ user.DownVotes }}</div>
    </div>
-<h3>Concepts</h3>
+<div class="card-panel"><h5>Concepts</h5></div>
 <div class="graph"></div>
 
-<h3>Settings</h3>
+<div class="card-panel"><h5>Settings</h5></div>
 <ul class="collapsible" data-collapsible="accordion">
     <li>
       <div class="collapsible-header"><i class="material-icons">filter_drama</i>Refinement Values</div>
@@ -86,7 +86,7 @@
         <script>
 
 var width = 960,
-    height = 200;
+    height = 500;
 
 var force = d3.layout.force()
     .size([width, height])

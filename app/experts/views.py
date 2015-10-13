@@ -1,7 +1,6 @@
 
 from flask import render_template
 from . import experts
-from .. import client,db_name,db_type
 from flask.ext.paginate import Pagination
 from flask import request
 from ..models import Experts
@@ -38,7 +37,7 @@ def get_experts():
 def user(username):
     user = Expert.get_expert_by_name(username)
     gravatar= hashlib.md5("{0}@example.com".format(user[0].name)).hexdigest()
-    dbjson= create_simmple_graph()
+    dbjson= create_simmple_graph(username)
     gravatar_url= 'http://www.gravatar.com/avatar/'+gravatar+'?s=200'
     categories={'Contribution':['Semantic','Sentiment'],'Relationship':['Type','Strength'],'Metadata':['Structural-Depth','Structural-Coverage','Descriptive'],'Administrative':['Background','Reputation']}
     return render_template('experts.html', user=user[0],grav = gravatar_url,categories=categories,da=dbjson)

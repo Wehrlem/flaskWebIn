@@ -20,7 +20,6 @@
   <table id="table" class="table table-hover table-mc-light-blue">
       <thead>
         <tr>
-          <th>ID</th>
           <th>Author</th>
           <th>Content</th>
           <th>Type</th>
@@ -29,10 +28,9 @@
       <tbody>
       {% for i in list %}
         <tr>
-          <td data-title="ID">{{i.PostId}}</td>
-          <td data-title="Name"><a href="{{ url_for('experts.user', username=i.name) }}">{{i.name}}</a></td>
+          <td data-title="Name"><a href="{% if i.username[0] %}{{ url_for('experts.user', username=i.username[0]) }}{% endif %}">{{i.username[0]}}</a></td>
           <td data-title="Link">
-            <a href="{{ url_for('posts.get_post', postid=i.PostId) }}">{{  i.short }}</a>
+            <a href="{{ url_for('posts.get_post', postid=i.PostId) }}">{{  i.Body|wordwrap }}</a>
           </td>
           <td data-title="Status">{{ i.PostType }}</td>
         </tr>

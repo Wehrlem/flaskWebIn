@@ -1,13 +1,14 @@
 
-from flask import render_template
+from flask import render_template,flash
 from . import posts
-from .. import client,db_name
 from flask.ext.paginate import Pagination
 from flask import request
 from ..models import Experts,Posts
+from .. import cache
 Post = Posts()
 Expert =Experts()
 import hashlib
+
 
 @posts.route('/posts')
 def get_posts():
@@ -22,27 +23,20 @@ def get_posts():
         page = 1
     if(search):
         list = Post.get_paged(search_parameter)
-        for i,k in enumerate(list):
-            name = Expert.get_expert_by_owner(k.PostId)
-            list[i].short = ' '.join(k.Body.split()[:5])
-            try:
-                list[i].name = name[0].name
-            except IndexError:
-                continue
         return render_template('posts.html',list=list)
 
     else:
+        count = cache.get('postcount')
+        #list = cache.get('posts'+str(page))
+        if count is None:
+            count = Post.get_count()
+            count = count[0].count
+            cache.set('postcount', count, timeout=300)
         list = Post.get_paged(page)
-        count = Post.get_count()
-
-        for i,k in enumerate(list):
-            name = Expert.get_expert_by_owner(k.PostId)
-            list[i].short = ' '.join(k.Body.split()[:5])
-            try:
-                list[i].name = name[0].name
-            except IndexError:
-                continue
-        pagination = Pagination(page=page, total=count[0].count, search=search, record_name='experts', per_page=10)
+        #if list is None:
+        #
+        #    cache.set('posts'+str(page),set(list),timeout=300)
+        pagination = Pagination(page=page, total=count, search=search, record_name='experts', per_page=10)
 
         return render_template('posts.html',list=list, pagination=pagination)
 

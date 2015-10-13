@@ -7,8 +7,8 @@ db_name = 'history'
 client = orient.OrientDB("localhost", 2424)
 client.db_open( db_name, "admin", "admin" )
 
-def create_simmple_graph():
-    results = client.query("select name AS user_name, ID ,in(knows).name AS concepts , inE(knows).strength AS strength, inE(knows).@rid as edgeid from Expert WHERE ID =10")
+def create_simmple_graph(username):
+    results = client.query("select name AS user_name, ID ,in(knows).name AS concepts , inE(knows).strength AS strength, inE(knows).@rid as edgeid from Expert WHERE name ='{0}'".format(username))
     G=nx.Graph()
     name= results[0].user_name
     G.add_node(name)
