@@ -36,7 +36,7 @@
       <div class="collapsible-body"><div class="collection">
         {% for item in categories.keys() %}
         <div class="row collection-item">
-            <div class="col s12 card-title"><h5>{{ item }}</h5></div>
+            <div class="col s12 card-title "><h5>{{ item }}</h5></div>
 
               {% for k in categories[item] %}
                   {% set kaka = (12/categories[item]|length)|int %}
